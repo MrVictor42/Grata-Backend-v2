@@ -1,0 +1,9 @@
+django
+djangorestframework
+django-cors-headers
+psycopg2
+gunicorn
+whitenoise
+django-rest-auth
+django-allauth
+django-environ
