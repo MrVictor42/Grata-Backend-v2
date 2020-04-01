@@ -6,7 +6,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,10 +22,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+
+    'users',
 ]
 
 MIDDLEWARE = [
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -39,8 +39,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
-ROOT_URLCONF = 'settings.urls'
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -51,6 +49,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+ROOT_URLCONF = 'settings.urls'
 
 TEMPLATES = [
     {
@@ -68,6 +68,15 @@ TEMPLATES = [
     },
 ]
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'users.api.serializers.UserSerializer',
+    'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer'
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
+}
+
 CSRF_COOKIE_NAME = "csrftoken"
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -82,3 +91,9 @@ STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'))
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = False
+
+AUTH_USER_MODEL = 'users.User'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False

@@ -5,12 +5,15 @@ services:
     image: postgres:11
     ports:
       - "5432:5432"
+    environment:
+        POSTGRES_DB: "db"
+        POSTGRES_HOST_AUTH_METHOD: "trust"
   backend:
-    build: ""
+    build: .
     volumes:
       - .:/code
     env_file:
-      - ../.env
+      - .env
     ports:
       - "8000:8000"
     links:
