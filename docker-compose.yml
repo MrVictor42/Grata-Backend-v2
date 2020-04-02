@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+        POSTGRES_DB: "db"
+        POSTGRES_HOST_AUTH_METHOD: "trust"
+  backend:
+    build: .
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    command: bash -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
