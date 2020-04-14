@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ('id', 'email', 'username', 'ramal',
+        fields = ('id', 'email', 'username', 'ramal', 'image',
                   'name', 'sector', 'is_administrator', 'is_participant')
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -27,11 +27,12 @@ class CustomRegisterSerializer(RegisterSerializer):
     is_administrator = serializers.BooleanField(default = False)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
+    image = serializers.ImageField(max_length = 255)
 
     class Meta:
 
         model = User
-        fields = ('email', 'username', 'ramal', 'name', 'password', 'is_administrator', 'is_participant')
+        fields = ('email', 'username', 'ramal', 'name', 'image', 'password', 'is_administrator', 'is_participant')
 
     def get_cleaned_data(self):
 
@@ -43,7 +44,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'ramal': self.validated_data.get('ramal', ''),
             'name': self.validated_data.get('name', ''),
             'is_administrator': self.validated_data.get('is_administrator', ''),
-            'is_participant': self.validated_data.get('is_participant', '')
+            'is_participant': self.validated_data.get('is_participant', ''),
+            'image': self.validated_data.get('image', '')
         }
 
     def save(self, request):
@@ -56,6 +58,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.is_administrator = self.cleaned_data.get('is_administrator')
         user.name = self.cleaned_data.get('name')
         user.ramal = self.cleaned_data.get('ramal')
+        user.image = self.cleaned_data.get('image')
 
         if user.is_administrator == True:
 
@@ -85,12 +88,7 @@ class TokenSerializer(serializers.ModelSerializer):
 
     def get_user_type(self, obj):
 
-        serializer_data = UserSerializer(
-            obj.user
-        ).data
+        serializer_data = UserSerializer(obj.user).data
         is_administrator = serializer_data.get('is_administrator')
         is_participant = serializer_data.get('is_participant')
-        return {
-            'is_participant': is_participant,
-            'is_administrator': is_administrator
-        }
+        return { 'is_participant': is_participant, 'is_administrator': is_administrator }

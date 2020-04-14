@@ -10,6 +10,7 @@ class User(AbstractUser, PermissionsMixin):
     is_participant = models.BooleanField(default = False)
     ramal = models.CharField(max_length = 6)
     name = models.CharField(max_length = 40)
+    image = models.ImageField('uploaded image', max_length = 255, null = True, blank = True)
     is_staff = models.BooleanField(_('staff status'), default = False)
     is_active = models.BooleanField(_('active status'), default = False)
     is_superuser = models.BooleanField(_('superuser status'), default = False)

@@ -28,6 +28,14 @@ class UserUpdate(UpdateAPIView):
         user.name = request.data.get('name')
         user.ramal = request.data.get('ramal')
 
+        print(request.data.get('image'))
+
+        # if request.data.get('image') == None:
+        #     user.image =
+        # else:
+        #     print(request.data.get('image'))
+        #     user.image = request.data.get('image')
+
         if request.data.get('is_administrator') is None:
             user.is_administrator = False
         else:
@@ -52,11 +60,8 @@ class UserUpdate(UpdateAPIView):
             user.is_active = True
 
         user.save()
-        serializer = UserSerializer(
-            instance = user,
-            data = request.data
-        )
-        serializer.is_valid(raise_exception=True)
+        serializer = UserSerializer(instance = user, data = request.data)
+        serializer.is_valid(raise_exception = True)
         self.perform_update(serializer)
 
         return Response(serializer.data)

@@ -7,3 +7,4 @@ whitenoise
 django-rest-auth
 django-allauth
 django-environ
+Pillow
