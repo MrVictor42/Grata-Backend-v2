@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView
 
 from users.models import User
+from images.models import Image
 from users.api.serializers import UserSerializer
 
 class UserViewSet(ModelViewSet):
@@ -23,18 +24,17 @@ class UserUpdate(UpdateAPIView):
     def update(self, request, *args, **kwargs):
 
         user = self.get_object()
+
         user.username = request.data.get('username')
         user.email = request.data.get('email')
         user.name = request.data.get('name')
         user.ramal = request.data.get('ramal')
 
-        print(request.data.get('image'))
-
-        # if request.data.get('image') == None:
-        #     user.image =
-        # else:
-        #     print(request.data.get('image'))
-        #     user.image = request.data.get('image')
+        if request.data.get('image') == None:
+            pass
+        else:
+            image_user = Image.objects.get(id = request.data.get('image'))
+            user.image = image_user
 
         if request.data.get('is_administrator') is None:
             user.is_administrator = False

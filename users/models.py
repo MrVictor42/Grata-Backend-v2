@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 
+from images.models import Image
+
 class User(AbstractUser, PermissionsMixin):
 
     username = models.CharField(max_length = 10, unique = True)
@@ -10,7 +12,8 @@ class User(AbstractUser, PermissionsMixin):
     is_participant = models.BooleanField(default = False)
     ramal = models.CharField(max_length = 6)
     name = models.CharField(max_length = 40)
-    image = models.ImageField('uploaded image', max_length = 255, null = True, blank = True)
+    image = models.ForeignKey(Image, on_delete = models.CASCADE, related_name = 'image_user',
+                              null = True, blank = True)
     is_staff = models.BooleanField(_('staff status'), default = False)
     is_active = models.BooleanField(_('active status'), default = False)
     is_superuser = models.BooleanField(_('superuser status'), default = False)

@@ -13,13 +13,13 @@ class StringSerializer(serializers.StringRelatedField):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    sector = StringSerializer(many = False)
+    image = StringSerializer(many = False)
 
     class Meta:
 
         model = User
         fields = ('id', 'email', 'username', 'ramal', 'image',
-                  'name', 'sector', 'is_administrator', 'is_participant')
+                  'name', 'is_administrator', 'is_participant')
 
 class CustomRegisterSerializer(RegisterSerializer):
 
