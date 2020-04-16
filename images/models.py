@@ -5,4 +5,4 @@ class Image(models.Model):
     image = models.ImageField(upload_to = 'uploaded_image')
 
     def __str__(self):
-    	 return self.image
+    	 return self.image.name

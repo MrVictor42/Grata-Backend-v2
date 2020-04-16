@@ -13,7 +13,7 @@ class StringSerializer(serializers.StringRelatedField):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    image = StringSerializer(many = False)
+    image = StringSerializer(many=False)
 
     class Meta:
 
