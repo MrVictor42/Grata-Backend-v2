@@ -6,7 +6,7 @@ from images.models import Image
 
 class User(AbstractUser, PermissionsMixin):
 
-    username = models.CharField(max_length = 10, unique = True)
+    username = models.CharField(max_length = 20, unique = True)
     email = models.EmailField(max_length = 50, unique = True)
     is_administrator = models.BooleanField(default = False)
     is_participant = models.BooleanField(default = False)

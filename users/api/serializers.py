@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from users.models import User
+from images.models import Image
 
 class StringSerializer(serializers.StringRelatedField):
 
@@ -12,8 +13,6 @@ class StringSerializer(serializers.StringRelatedField):
         return value
 
 class UserSerializer(serializers.ModelSerializer):
-
-    image = StringSerializer(many=False)
 
     class Meta:
 
@@ -27,12 +26,12 @@ class CustomRegisterSerializer(RegisterSerializer):
     is_administrator = serializers.BooleanField(default = False)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
-    image = serializers.ImageField(max_length = 255)
 
     class Meta:
 
         model = User
-        fields = ('email', 'username', 'ramal', 'name', 'image', 'password', 'is_administrator', 'is_participant')
+        fields = ('email', 'username', 'ramal', 'name', 'image',
+                  'password', 'is_administrator', 'is_participant')
 
     def get_cleaned_data(self):
 
@@ -58,7 +57,13 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.is_administrator = self.cleaned_data.get('is_administrator')
         user.name = self.cleaned_data.get('name')
         user.ramal = self.cleaned_data.get('ramal')
-        user.image = self.cleaned_data.get('image')
+        image = self.cleaned_data.get('image')
+
+        if image == None or image == '':
+            user.image = None
+        else:
+            image_user = Image.objects.get(id = request.data.get('image'))
+            user.image = image_user
 
         if user.is_administrator == True:
 

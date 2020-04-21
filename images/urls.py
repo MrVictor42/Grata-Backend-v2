@@ -1,5 +1,6 @@
 from django.urls import path
-from images.api.views import ImageListView, ImageDetailView, ImageCreateView, ImageDestroyView, ImageUpdateView
+from images.api.views import ImageListView, ImageDetailView, ImageCreateView, \
+                             ImageDestroyView, ImageUpdateView
 
 urlpatterns = [
     path('', ImageListView.as_view()),
