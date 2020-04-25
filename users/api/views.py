@@ -29,6 +29,7 @@ class UserUpdate(UpdateAPIView):
         user.email = request.data.get('email')
         user.name = request.data.get('name')
         user.ramal = request.data.get('ramal')
+        user.description = request.data.get('description')
 
         if request.data.get('image') == None:
             pass

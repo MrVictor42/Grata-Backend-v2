@@ -12,6 +12,7 @@ class User(AbstractUser, PermissionsMixin):
     is_participant = models.BooleanField(default = False)
     ramal = models.CharField(max_length = 6)
     name = models.CharField(max_length = 40)
+    description = models.CharField(max_length = 500, null = True)
     image = models.ForeignKey(Image, on_delete = models.CASCADE, related_name = 'image_user',
                               null = True, blank = True)
     is_staff = models.BooleanField(_('staff status'), default = False)

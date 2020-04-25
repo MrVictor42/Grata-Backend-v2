@@ -18,12 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
 
         model = User
         fields = ('id', 'email', 'username', 'ramal', 'image',
-                  'name', 'is_administrator', 'is_participant')
+                  'name', 'is_administrator', 'is_participant', 'description')
 
 class CustomRegisterSerializer(RegisterSerializer):
 
     is_participant = serializers.BooleanField(default = False)
     is_administrator = serializers.BooleanField(default = False)
+    description = serializers.CharField(max_length = 500)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
 
@@ -31,7 +32,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         model = User
         fields = ('email', 'username', 'ramal', 'name', 'image',
-                  'password', 'is_administrator', 'is_participant')
+                  'password', 'is_administrator', 'is_participant', 'description')
 
     def get_cleaned_data(self):
 
@@ -44,7 +45,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'name': self.validated_data.get('name', ''),
             'is_administrator': self.validated_data.get('is_administrator', ''),
             'is_participant': self.validated_data.get('is_participant', ''),
-            'image': self.validated_data.get('image', '')
+            'image': self.validated_data.get('image', ''),
+            'description': self.validated_data.get('description', '')
         }
 
     def save(self, request):
@@ -57,6 +59,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.is_administrator = self.cleaned_data.get('is_administrator')
         user.name = self.cleaned_data.get('name')
         user.ramal = self.cleaned_data.get('ramal')
+        user.description = self.cleaned_data.get('description')
         image = self.cleaned_data.get('image')
 
         if image == None or image == '':
