@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 
 from images.models import Image
+from sectors.models import Sector
 
 class User(AbstractUser, PermissionsMixin):
 
@@ -15,6 +16,8 @@ class User(AbstractUser, PermissionsMixin):
     description = models.CharField(max_length = 500, null = True)
     image = models.ForeignKey(Image, on_delete = models.CASCADE, related_name = 'image_user',
                               null = True, blank = True)
+    sector = models.ForeignKey(Sector, on_delete = models.CASCADE, related_name = 'users_in_sector',
+                               null = True, blank = True)
     is_staff = models.BooleanField(_('staff status'), default = False)
     is_active = models.BooleanField(_('active status'), default = False)
     is_superuser = models.BooleanField(_('superuser status'), default = False)

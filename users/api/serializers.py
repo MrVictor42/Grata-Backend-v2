@@ -14,6 +14,16 @@ class StringSerializer(serializers.StringRelatedField):
 
 class UserSerializer(serializers.ModelSerializer):
 
+    sector = StringSerializer(many = False)
+
+    class Meta:
+
+        model = User
+        fields = ('id', 'email', 'username', 'ramal', 'image', 'sector',
+                  'name', 'is_administrator', 'is_participant', 'description')
+
+class UserSerializerUpdate(serializers.ModelSerializer):
+
     class Meta:
 
         model = User

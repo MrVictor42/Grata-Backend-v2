@@ -4,7 +4,8 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIVi
 
 from users.models import User
 from images.models import Image
-from users.api.serializers import UserSerializer
+from sectors.models import Sector
+from users.api.serializers import UserSerializer, UserSerializerUpdate
 
 class UserViewSet(ModelViewSet):
 
@@ -18,18 +19,20 @@ class UserDetail(RetrieveAPIView):
 
 class UserUpdate(UpdateAPIView):
 
-    serializer_class = UserSerializer
+    serializer_class = UserSerializerUpdate
     queryset = User.objects.all()
 
     def update(self, request, *args, **kwargs):
 
         user = self.get_object()
+        sector = Sector.objects.get(id = request.data.get('sector'))
 
         user.username = request.data.get('username')
         user.email = request.data.get('email')
         user.name = request.data.get('name')
         user.ramal = request.data.get('ramal')
         user.description = request.data.get('description')
+        user.sector = sector
 
         if request.data.get('image') == None:
             pass
