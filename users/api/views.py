@@ -24,7 +24,7 @@ class UserUpdate(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
 
-        user = self.get_object()
+        user = User.objects.get(id = request.data.get('id'))
         sector = Sector.objects.get(id = request.data.get('sector'))
 
         user.username = request.data.get('username')
@@ -32,7 +32,11 @@ class UserUpdate(UpdateAPIView):
         user.name = request.data.get('name')
         user.ramal = request.data.get('ramal')
         user.description = request.data.get('description')
-        user.sector = sector
+
+        if sector == None or sector == '':
+            user.sector = user.sector
+        else:
+            user.sector = sector
 
         if request.data.get('image') == None:
             pass
