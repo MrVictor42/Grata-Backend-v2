@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from users.models import User
-from images.models import Image
+from sectors.models import Sector
 
 class StringSerializer(serializers.StringRelatedField):
 
@@ -37,11 +37,12 @@ class CustomRegisterSerializer(RegisterSerializer):
     description = serializers.CharField(max_length = 500)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
+    sector = serializers.CharField(max_length = 3)
 
     class Meta:
 
         model = User
-        fields = ('email', 'username', 'ramal', 'name', 'image',
+        fields = ('email', 'username', 'ramal', 'name', 'sector',
                   'password', 'is_administrator', 'is_participant', 'description')
 
     def get_cleaned_data(self):
@@ -55,8 +56,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'name': self.validated_data.get('name', ''),
             'is_administrator': self.validated_data.get('is_administrator', ''),
             'is_participant': self.validated_data.get('is_participant', ''),
-            'image': self.validated_data.get('image', ''),
-            'description': self.validated_data.get('description', '')
+            'description': self.validated_data.get('description', ''),
+            'sector': self.validated_data.get('sector', '')
         }
 
     def save(self, request):
@@ -70,13 +71,15 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.name = self.cleaned_data.get('name')
         user.ramal = self.cleaned_data.get('ramal')
         user.description = self.cleaned_data.get('description')
-        image = self.cleaned_data.get('image')
+        user.image = None
+        sector = self.cleaned_data.get('sector')
 
-        if image == None or image == '':
-            user.image = None
+        if sector == None or sector == '':
+            sector = None
         else:
-            image_user = Image.objects.get(id = request.data.get('image'))
-            user.image = image_user
+            sector = Sector.objects.get(id = self.cleaned_data.get('sector'))
+
+        user.sector = sector
 
         if user.is_administrator == True:
 
