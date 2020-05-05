@@ -7,3 +7,4 @@ class SectorSerialize(ModelSerializer):
 
         model = Sector
         fields = ('__all__')
+        lookup_field = 'slug'

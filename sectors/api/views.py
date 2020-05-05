@@ -34,6 +34,7 @@ class SectorDetailView(RetrieveAPIView):
 
     serializer_class = SectorSerialize
     queryset = Sector.objects.all()
+    lookup_field = 'slug'
 
 class SectorUpdateView(UpdateAPIView):
 
