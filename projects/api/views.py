@@ -53,3 +53,14 @@ class ProjectDeleteView(DestroyAPIView):
 
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
+
+class ProjectsListView(ListAPIView):
+
+    serializer_class = ProjectSerialize
+
+    def get_queryset(self):
+
+        sector_id = self.kwargs['pk']
+        queryset = Project.objects.filter(sector = sector_id)
+
+        return queryset
