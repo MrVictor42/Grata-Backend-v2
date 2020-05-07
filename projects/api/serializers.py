@@ -8,3 +8,4 @@ class ProjectSerialize(ModelSerializer):
 
         model = Project
         fields = ('__all__')
+        lookup_field = 'slug'

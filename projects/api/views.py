@@ -43,6 +43,7 @@ class ProjectDetailView(RetrieveAPIView):
 
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
+    lookup_field = 'slug'
 
 class ProjectUpdateView(UpdateAPIView):
 
