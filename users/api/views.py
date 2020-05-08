@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListAPIView
 
 from users.models import User
 from images.models import Image
@@ -25,7 +25,8 @@ class UserUpdate(UpdateAPIView):
     def update(self, request, *args, **kwargs):
 
         user = User.objects.get(id = request.data.get('id'))
-        sector = Sector.objects.get(id = request.data.get('sector'))
+        sector = request.data.get('sector')
+        image = request.data.get('image')
 
         user.username = request.data.get('username')
         user.email = request.data.get('email')
@@ -33,16 +34,17 @@ class UserUpdate(UpdateAPIView):
         user.ramal = request.data.get('ramal')
         user.description = request.data.get('description')
 
-        if sector == None or sector == '':
-            user.sector = user.sector
+        if sector == None or sector == '' or sector is None:
+            user.sector = None
         else:
+            sector = Sector.objects.get(id = request.data.get('sector'))
             user.sector = sector
 
-        if request.data.get('image') == None:
+        if image == None or image == '' or image is None:
             pass
         else:
-            image_user = Image.objects.get(id = request.data.get('image'))
-            user.image = image_user
+            image = Image.objects.get(id = request.data.get('image'))
+            user.image = image
 
         if request.data.get('is_administrator') is None:
             user.is_administrator = False
@@ -78,3 +80,13 @@ class UserDelete(DestroyAPIView):
 
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+class UserInSector(ListAPIView):
+
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        sector_id = self.kwargs['pk']
+        queryset = User.objects.filter(sector = sector_id)
+
+        return queryset

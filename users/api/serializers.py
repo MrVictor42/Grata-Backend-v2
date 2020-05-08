@@ -37,12 +37,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     description = serializers.CharField(max_length = 500)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
-    sector = serializers.CharField(max_length = 3)
 
     class Meta:
 
         model = User
-        fields = ('email', 'username', 'ramal', 'name', 'sector',
+        fields = ('email', 'username', 'ramal', 'name',
                   'password', 'is_administrator', 'is_participant', 'description')
 
     def get_cleaned_data(self):
@@ -57,7 +56,6 @@ class CustomRegisterSerializer(RegisterSerializer):
             'is_administrator': self.validated_data.get('is_administrator', ''),
             'is_participant': self.validated_data.get('is_participant', ''),
             'description': self.validated_data.get('description', ''),
-            'sector': self.validated_data.get('sector', '')
         }
 
     def save(self, request):
