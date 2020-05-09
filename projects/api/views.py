@@ -5,6 +5,8 @@ from django.template.defaultfilters import slugify
 
 from projects.models import Project
 from sectors.models import Sector
+from users.models import User
+
 from projects.api.serializers import ProjectSerialize
 
 class ProjectListView(ListAPIView):
@@ -39,29 +41,67 @@ class ProjectCreateView(CreateAPIView):
 
         return Response(serializer.data)
 
-class ProjectDetailView(RetrieveAPIView):
+class ProjectAddUsers(UpdateAPIView):
 
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
-    lookup_field = 'slug'
+
+    def put(self, request, *args, **kwargs):
+
+        project = Project.objects.get(id = request.data.get('projectID'))
+        sector = Sector.objects.get(id = request.data.get('sector'))
+
+        project.title = request.data.get('title')
+        project.status = request.data.get('status')
+        project.slug = slugify(project.title)
+        project.sector = sector
+
+        for users in request.data.get('users'):
+
+            new_user = User.objects.get(id = users['id'])
+            project.users.add(new_user)
+
+        project.save()
+        serializer = ProjectSerialize(instance = project, data = request.data)
+        serializer.is_valid(raise_exception = True)
+
+        return Response(serializer.data)
 
 class ProjectUpdateView(UpdateAPIView):
 
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
 
-class ProjectDeleteView(DestroyAPIView):
+    def put(self, request, *args, **kwargs):
 
+        project = Project.objects.get(id = request.data.get('projectID'))
+        sector = Sector.objects.get(id = request.data.get('sector'))
+
+        project.title = request.data.get('title')
+        project.status = request.data.get('status')
+        project.slug = slugify(project.title)
+        project.sector = sector
+
+        project.save()
+        serializer = ProjectSerialize(instance = project, data = request.data)
+        serializer.is_valid(raise_exception = True)
+
+        return Response(serializer.data)
+
+class ProjectDetailView(RetrieveAPIView):
+    serializer_class = ProjectSerialize
+    queryset = Project.objects.all()
+    lookup_field = 'slug'
+
+class ProjectDeleteView(DestroyAPIView):
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
 
 class ProjectsListView(ListAPIView):
-
     serializer_class = ProjectSerialize
 
     def get_queryset(self):
-
         sector_id = self.kwargs['pk']
-        queryset = Project.objects.filter(sector = sector_id)
+        queryset = Project.objects.filter(sector=sector_id)
 
         return queryset

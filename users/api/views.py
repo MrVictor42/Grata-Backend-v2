@@ -5,6 +5,9 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIVi
 from users.models import User
 from images.models import Image
 from sectors.models import Sector
+from projects.models import Project
+
+from projects.api.serializers import ProjectSerialize
 from users.api.serializers import UserSerializer, UserSerializerUpdate
 
 class UserViewSet(ModelViewSet):
@@ -90,3 +93,15 @@ class UserInSector(ListAPIView):
         queryset = User.objects.filter(sector = sector_id)
 
         return queryset
+
+class UsersProjectInListView(ListAPIView):
+
+    serializer_class = ProjectSerialize
+
+    def get_queryset(self):
+
+        project_id = self.kwargs['pk']
+        current_project = Project.objects.get(id = project_id)
+        users_project = current_project.users.all()
+
+        return users_project
