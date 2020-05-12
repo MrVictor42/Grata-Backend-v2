@@ -1,6 +1,6 @@
 from django.urls import path
 from users.api.views import UserViewSet, UserDetail, UserUpdate, UserDelete, UserInSector, \
-                            UsersProjectInListView
+                            UsersProjectInListView, UsersProjectNotInListView
 
 urlpatterns = [
     path('', UserViewSet.as_view({'get': 'list'})),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('user_delete/<pk>/', UserDelete.as_view()),
     path('users_in_sector/<pk>/', UserInSector.as_view()),
     path('users_in_project/<pk>/', UsersProjectInListView.as_view()),
+    path('users_not_in_project/<pk>/', UsersProjectNotInListView.as_view())
 ]

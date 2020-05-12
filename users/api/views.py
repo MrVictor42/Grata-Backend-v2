@@ -96,7 +96,7 @@ class UserInSector(ListAPIView):
 
 class UsersProjectInListView(ListAPIView):
 
-    serializer_class = ProjectSerialize
+    serializer_class = UserSerializer
 
     def get_queryset(self):
 
@@ -105,3 +105,18 @@ class UsersProjectInListView(ListAPIView):
         users_project = current_project.users.all()
 
         return users_project
+
+class UsersProjectNotInListView(ListAPIView):
+
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+
+        list_users = User.objects.all()
+        project_id = self.kwargs['pk']
+        current_project = Project.objects.get(id = project_id)
+        list_users_project = current_project.users.all()
+
+        list_users_not_project = [ item for item in list_users if item not in list_users_project ]
+
+        return list_users_not_project
