@@ -25,6 +25,25 @@ class SectorCreateView(CreateAPIView):
 
         return Response(serializer.data)
 
+class SectorUpdateView(UpdateAPIView):
+
+    serializer_class = SectorSerialize
+    queryset = Sector.objects.all()
+
+    def put(self, request, *args, **kwargs):
+
+        sector = Sector.objects.get(id = request.data.get('sectorID'))
+
+        sector.initials = request.data.get('initials')
+        sector.name = request.data.get('name')
+        sector.slug = slugify(sector.name)
+
+        sector.save()
+        serializer = SectorSerialize(instance = sector, data = request.data)
+        serializer.is_valid(raise_exception = True)
+
+        return Response(serializer.data)
+
 class SectorListView(ListAPIView):
 
     serializer_class = SectorSerialize
@@ -35,11 +54,6 @@ class SectorDetailView(RetrieveAPIView):
     serializer_class = SectorSerialize
     queryset = Sector.objects.all()
     lookup_field = 'slug'
-
-class SectorUpdateView(UpdateAPIView):
-
-    serializer_class = SectorSerialize
-    queryset = Sector.objects.all()
 
 class SectorDeleteView(DestroyAPIView):
 

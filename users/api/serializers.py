@@ -37,7 +37,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     description = serializers.CharField(max_length = 500)
     ramal = serializers.CharField(max_length = 6)
     name = serializers.CharField(max_length = 40)
-    sector = serializers.CharField(max_length = 14)
+    sector = serializers.CharField(max_length = 14, allow_blank = True)
 
     class Meta:
 
