@@ -14,6 +14,17 @@ class ProjectListView(ListAPIView):
     serializer_class = ProjectSerialize
     queryset = Project.objects.all()
 
+class ProjectDetailView(RetrieveAPIView):
+
+    serializer_class = ProjectSerialize
+    queryset = Project.objects.all()
+    lookup_field = 'slug'
+
+class ProjectDeleteView(DestroyAPIView):
+
+    serializer_class = ProjectSerialize
+    queryset = Project.objects.all()
+
 class ProjectCreateView(CreateAPIView):
 
     serializer_class = ProjectSerialize
@@ -61,17 +72,6 @@ class ProjectUpdateView(UpdateAPIView):
         serializer.is_valid(raise_exception = True)
 
         return Response(serializer.data)
-
-class ProjectDetailView(RetrieveAPIView):
-
-    serializer_class = ProjectSerialize
-    queryset = Project.objects.all()
-    lookup_field = 'slug'
-
-class ProjectDeleteView(DestroyAPIView):
-
-    serializer_class = ProjectSerialize
-    queryset = Project.objects.all()
 
 class ProjectsListView(ListAPIView):
 
