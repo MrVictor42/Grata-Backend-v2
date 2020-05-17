@@ -5,9 +5,9 @@ from projects.models import Project
 
 class Meeting(models.Model):
 
-    title = models.CharField(max_length = 30)
-    subject_matter = models.CharField(max_length = 40)
-    status = models.CharField(max_length=10, null = True)
+    title = models.CharField(max_length = 40)
+    subject_matter = models.CharField(max_length = 500)
+    status = models.CharField(max_length = 10, null = True)
     initial_date = models.CharField(max_length = 12)
     final_date = models.CharField(max_length = 12, null = True)
     initial_hour = models.CharField(max_length = 10)

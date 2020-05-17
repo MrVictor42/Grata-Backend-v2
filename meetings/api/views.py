@@ -89,3 +89,13 @@ class MeetingUpdateView(UpdateAPIView):
         serializer.is_valid(raise_exception = True)
 
         return Response(serializer.data)
+
+class MeetingsListView(ListAPIView):
+
+    serializer_class = MeetingSerialize
+
+    def get_queryset(self):
+        project_id = self.kwargs['pk']
+        queryset = Meeting.objects.filter(project = project_id)
+
+        return queryset
