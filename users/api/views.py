@@ -6,8 +6,8 @@ from users.models import User
 from images.models import Image
 from sectors.models import Sector
 from projects.models import Project
+from meetings.models import Meeting
 
-from projects.api.serializers import ProjectSerialize
 from users.api.serializers import UserSerializer, UserSerializerUpdate
 
 class UserViewSet(ModelViewSet):
@@ -120,3 +120,35 @@ class UsersProjectNotInListView(ListAPIView):
         list_users_not_project = [ item for item in list_users if item not in list_users_project ]
 
         return list_users_not_project
+
+class UsersInProjectAndMeetingListView(ListAPIView):
+
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+
+        meeting_id = self.kwargs['pk_meeting']
+        project_id = self.kwargs['pk_project']
+        current_meeting = Meeting.objects.get(id = meeting_id)
+        current_project = Project.objects.get(id = project_id)
+        list_users_in_meeting = current_meeting.users.all()
+        list_users_in_project = current_project.users.all()
+        list_users = [ item for item in list_users_in_project if item in list_users_in_meeting]
+
+        return list_users
+
+class UsersInProjectAndNotMeetingListView(ListAPIView):
+
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+
+        meeting_id = self.kwargs['pk_meeting']
+        project_id = self.kwargs['pk_project']
+        current_meeting = Meeting.objects.get(id = meeting_id)
+        current_project = Project.objects.get(id = project_id)
+        list_users_in_meeting = current_meeting.users.all()
+        list_users_in_project = current_project.users.all()
+        list_users = [ item for item in list_users_in_project if item not in list_users_in_meeting]
+
+        return list_users
