@@ -7,6 +7,8 @@ from users.api.serializers import StringSerializer
 class MeetingSerialize(ModelSerializer):
 
     users = StringSerializer(many = True)
+    rules = StringSerializer(many = True)
+    agendas = StringSerializer(many = True)
 
     class Meta:
 

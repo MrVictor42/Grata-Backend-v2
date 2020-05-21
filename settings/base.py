@@ -27,7 +27,9 @@ INSTALLED_APPS = [
     'images',
     'sectors',
     'projects',
-    'meetings'
+    'meetings',
+    'agenda',
+    'rules'
 ]
 
 MIDDLEWARE = [

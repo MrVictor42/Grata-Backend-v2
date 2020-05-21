@@ -2,7 +2,8 @@ from django.urls import path
 
 from meetings.api.views import MeetingListView, MeetingCreateView, \
                                MeetingDeleteView, MeetingDetailView, MeetingUpdateView, \
-                               MeetingsListView, MeetingAddUsers, MeetingRemoveUsers
+                               MeetingsListView, MeetingAddUsers, MeetingRemoveUsers, \
+                               MeetingAddItems
 
 urlpatterns = [
     path('', MeetingListView.as_view()),
@@ -12,5 +13,6 @@ urlpatterns = [
     path('delete/<pk>/', MeetingDeleteView.as_view()),
     path('meetings_in_project/<slug>/', MeetingsListView.as_view()),
     path('add_users_meeting/<pk>/', MeetingAddUsers.as_view()),
-    path('remove_users_meeting/<pk>/', MeetingRemoveUsers.as_view())
+    path('remove_users_meeting/<pk>/', MeetingRemoveUsers.as_view()),
+    path('add_items/<pk>/', MeetingAddItems.as_view())
 ]

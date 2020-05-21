@@ -3,9 +3,11 @@ from rest_framework.generics import CreateAPIView, ListAPIView, \
 from rest_framework.response import Response
 from django.template.defaultfilters import slugify
 
+from users.models import User
 from meetings.models import Meeting
 from projects.models import Project
-from users.models import User
+from rules.models import Rules
+from agenda.models import Agenda
 
 from meetings.api.serializers import MeetingSerialize
 
@@ -186,3 +188,81 @@ class MeetingRemoveUsers(UpdateAPIView):
         serializer.is_valid(raise_exception = True)
 
         return Response(serializer.data)
+
+class MeetingAddItems(UpdateAPIView):
+
+    serializer_class = MeetingSerialize
+    queryset = Meeting.objects.all()
+
+    def put(self, request, *args, **kwargs):
+
+        meeting = Meeting.objects.get(id = request.data.get('meetingID'))
+        project = Project.objects.get(id = request.data.get('projectID'))
+        meeting_leader = User.objects.get(id = request.data.get('userID'))
+        final_date = request.data.get('final_date')
+        final_hour = request.data.get('final_hour')
+
+        meeting.title = request.data.get('title')
+        meeting.status = request.data.get('status')
+        meeting.slug = slugify(meeting.title)
+        meeting.initial_date = request.data.get('initial_date')
+        meeting.initial_hour = request.data.get('initial_hour')
+        meeting.subject_matter = request.data.get('subject_matter')
+        meeting.project = project
+        meeting.meeting_leader = meeting_leader
+
+        if final_hour == '' or final_hour == None:
+            meeting.final_hour = None
+        else:
+            meeting.final_hour = final_hour
+
+        if final_date == '' or final_date == None:
+            meeting.final_date = None
+        else:
+            meeting.final_date = final_date
+
+        rules_request = request.data.get('rules')
+        agendas_request = request.data.get('agendas')
+
+        list_rules_in_meeting = meeting.rules.all()
+        list_rules_request = []
+        list_rules = []
+        list_agendas_in_meeting = meeting.agendas.all()
+        list_agendas_request = []
+        list_agendas = []
+
+        final_list_rules = []
+        final_list_agenda = []
+
+        for rules in rules_request:
+            list_rules_request.append(rules['title'])
+
+        for rules in list_rules_in_meeting:
+            list_rules.append(rules.title)
+
+        for agendas in agendas_request:
+            list_agendas_request.append(agendas['title'])
+
+        for agendas in list_agendas_in_meeting:
+            list_agendas.append(agendas.title)
+
+        final_list_rules = [ item for item in list_rules_request if item not in list_rules ]
+        final_list_agenda = [ item for item in list_agendas_request if item not in list_agendas ]
+
+        for rules in final_list_rules:
+
+            new_rule = Rules()
+            new_rule.title = rules
+            new_rule.save()
+            meeting.rules.add(new_rule)
+
+        for agendas in final_list_agenda:
+
+            new_agenda = Agenda()
+            new_agenda.title = agendas
+            new_agenda.save()
+            meeting.agendas.add(new_agenda)
+
+        meeting.save()
+        serializer = MeetingSerialize(instance = meeting, data = request.data)
+        serializer.is_valid(raise_exception = True)

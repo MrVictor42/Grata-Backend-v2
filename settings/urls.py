@@ -13,5 +13,7 @@ urlpatterns = [
     path('images/', include('images.urls')),
     path('sectors/', include('sectors.urls')),
     path('projects/', include('projects.urls')),
-    path('meetings/', include('meetings.urls'))
+    path('meetings/', include('meetings.urls')),
+    path('agendas/', include('agenda.urls')),
+    path('rules/', include('rules.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
