@@ -15,5 +15,6 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('meetings/', include('meetings.urls')),
     path('agendas/', include('agenda.urls')),
-    path('rules/', include('rules.urls'))
+    path('rules/', include('rules.urls')),
+    path('comments/', include('comments.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
