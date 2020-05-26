@@ -49,6 +49,7 @@ class MeetingCreateView(CreateAPIView):
         meeting.meeting_leader = meeting_leader
         meeting.final_date = None
         meeting.final_hour = None
+        meeting.duration_time = None
 
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
@@ -77,6 +78,7 @@ class MeetingUpdateView(UpdateAPIView):
         meeting.subject_matter = request.data.get('subject_matter')
         meeting.project = project
         meeting.meeting_leader = meeting_leader
+        meeting.duration_time = None
 
         if final_hour == '' or final_hour == None:
             meeting.final_hour = None
@@ -126,6 +128,7 @@ class MeetingAddUsers(UpdateAPIView):
         meeting.subject_matter = request.data.get('subject_matter')
         meeting.project = project
         meeting.meeting_leader = meeting_leader
+        meeting.duration_time = None
 
         if final_hour == '' or final_hour == None:
             meeting.final_hour = None
@@ -168,6 +171,7 @@ class MeetingRemoveUsers(UpdateAPIView):
         meeting.subject_matter = request.data.get('subject_matter')
         meeting.project = project
         meeting.meeting_leader = meeting_leader
+        meeting.duration_time = None
 
         if final_hour == '' or final_hour == None:
             meeting.final_hour = None
@@ -210,6 +214,7 @@ class MeetingAddItems(UpdateAPIView):
         meeting.subject_matter = request.data.get('subject_matter')
         meeting.project = project
         meeting.meeting_leader = meeting_leader
+        meeting.duration_time = None
 
         if final_hour == '' or final_hour == None:
             meeting.final_hour = None
@@ -230,9 +235,6 @@ class MeetingAddItems(UpdateAPIView):
         list_agendas_in_meeting = meeting.agendas.all()
         list_agendas_request = []
         list_agendas = []
-
-        final_list_rules = []
-        final_list_agenda = []
 
         for rules in rules_request:
             list_rules_request.append(rules['title'])

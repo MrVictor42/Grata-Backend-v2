@@ -12,8 +12,11 @@ class Meeting(models.Model):
     status = models.CharField(max_length = 10, null = True)
     initial_date = models.CharField(max_length = 12)
     final_date = models.CharField(max_length = 12, null = True)
+    real_date = models.CharField(max_length = 12, null = True)
     initial_hour = models.CharField(max_length = 10)
     final_hour = models.CharField(max_length = 10, null = True)
+    real_hour = models.CharField(max_length = 10, null = True)
+    duration_time = models.CharField(max_length = 10, null = True)
     slug = models.SlugField(max_length = 100, unique = True, null = True, blank = True)
     meeting_leader = models.ForeignKey(User, on_delete = models.CASCADE,
                                        related_name = 'meeting_leader',
