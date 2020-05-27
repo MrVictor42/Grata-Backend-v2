@@ -3,7 +3,7 @@ from django.urls import path
 from meetings.api.views import MeetingListView, MeetingCreateView, \
                                MeetingDeleteView, MeetingDetailView, MeetingUpdateView, \
                                MeetingsListView, MeetingAddUsers, MeetingRemoveUsers, \
-                               MeetingAddItems
+                               MeetingAddItems, FinishMeeting
 
 urlpatterns = [
     path('', MeetingListView.as_view()),
@@ -14,5 +14,6 @@ urlpatterns = [
     path('meetings_in_project/<slug>/', MeetingsListView.as_view()),
     path('add_users_meeting/<pk>/', MeetingAddUsers.as_view()),
     path('remove_users_meeting/<pk>/', MeetingRemoveUsers.as_view()),
-    path('add_items/<pk>/', MeetingAddItems.as_view())
+    path('add_items/<pk>/', MeetingAddItems.as_view()),
+    path('finish_meeting/<pk>/', FinishMeeting.as_view())
 ]

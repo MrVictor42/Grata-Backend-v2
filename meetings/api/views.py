@@ -47,9 +47,9 @@ class MeetingCreateView(CreateAPIView):
         meeting.subject_matter = request.data.get('subject_matter')
         meeting.project = project
         meeting.meeting_leader = meeting_leader
-        meeting.final_date = None
-        meeting.final_hour = None
         meeting.duration_time = None
+        meeting.real_hour = None
+        meeting.real_date = None
 
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
@@ -67,8 +67,6 @@ class MeetingUpdateView(UpdateAPIView):
         meeting = Meeting.objects.get(id = request.data.get('meetingID'))
         project = Project.objects.get(id = request.data.get('projectID'))
         meeting_leader = User.objects.get(id = request.data.get('userID'))
-        final_date = request.data.get('final_date')
-        final_hour = request.data.get('final_hour')
 
         meeting.title = request.data.get('title')
         meeting.status = request.data.get('status')
@@ -79,16 +77,8 @@ class MeetingUpdateView(UpdateAPIView):
         meeting.project = project
         meeting.meeting_leader = meeting_leader
         meeting.duration_time = None
-
-        if final_hour == '' or final_hour == None:
-            meeting.final_hour = None
-        else:
-            meeting.final_hour = final_hour
-
-        if final_date == '' or final_date == None:
-            meeting.final_date = None
-        else:
-            meeting.final_date = final_date
+        meeting.real_hour = None
+        meeting.real_date = None
 
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
@@ -117,8 +107,6 @@ class MeetingAddUsers(UpdateAPIView):
         meeting = Meeting.objects.get(id = request.data.get('meetingID'))
         project = Project.objects.get(id = request.data.get('projectID'))
         meeting_leader = User.objects.get(id = request.data.get('userID'))
-        final_date = request.data.get('final_date')
-        final_hour = request.data.get('final_hour')
 
         meeting.title = request.data.get('title')
         meeting.status = request.data.get('status')
@@ -129,16 +117,8 @@ class MeetingAddUsers(UpdateAPIView):
         meeting.project = project
         meeting.meeting_leader = meeting_leader
         meeting.duration_time = None
-
-        if final_hour == '' or final_hour == None:
-            meeting.final_hour = None
-        else:
-            meeting.final_hour = final_hour
-
-        if final_date == '' or final_date == None:
-            meeting.final_date = None
-        else:
-            meeting.final_date = final_date
+        meeting.real_hour = None
+        meeting.real_date = None
 
         for users in request.data.get('users'):
             new_user = User.objects.get(id = users['id'])
@@ -160,8 +140,6 @@ class MeetingRemoveUsers(UpdateAPIView):
         meeting = Meeting.objects.get(id = request.data.get('meetingID'))
         project = Project.objects.get(id = request.data.get('projectID'))
         meeting_leader = User.objects.get(id = request.data.get('userID'))
-        final_date = request.data.get('final_date')
-        final_hour = request.data.get('final_hour')
 
         meeting.title = request.data.get('title')
         meeting.status = request.data.get('status')
@@ -172,16 +150,8 @@ class MeetingRemoveUsers(UpdateAPIView):
         meeting.project = project
         meeting.meeting_leader = meeting_leader
         meeting.duration_time = None
-
-        if final_hour == '' or final_hour == None:
-            meeting.final_hour = None
-        else:
-            meeting.final_hour = final_hour
-
-        if final_date == '' or final_date == None:
-            meeting.final_date = None
-        else:
-            meeting.final_date = final_date
+        meeting.real_hour = None
+        meeting.real_date = None
 
         for users in request.data.get('users'):
             delete_user = User.objects.get(id = users['id'])
@@ -203,8 +173,6 @@ class MeetingAddItems(UpdateAPIView):
         meeting = Meeting.objects.get(id = request.data.get('meetingID'))
         project = Project.objects.get(id = request.data.get('projectID'))
         meeting_leader = User.objects.get(id = request.data.get('userID'))
-        final_date = request.data.get('final_date')
-        final_hour = request.data.get('final_hour')
 
         meeting.title = request.data.get('title')
         meeting.status = request.data.get('status')
@@ -215,16 +183,8 @@ class MeetingAddItems(UpdateAPIView):
         meeting.project = project
         meeting.meeting_leader = meeting_leader
         meeting.duration_time = None
-
-        if final_hour == '' or final_hour == None:
-            meeting.final_hour = None
-        else:
-            meeting.final_hour = final_hour
-
-        if final_date == '' or final_date == None:
-            meeting.final_date = None
-        else:
-            meeting.final_date = final_date
+        meeting.real_hour = None
+        meeting.real_date = None
 
         rules_request = request.data.get('rules')
         agendas_request = request.data.get('agendas')
@@ -264,6 +224,33 @@ class MeetingAddItems(UpdateAPIView):
             new_agenda.title = agendas
             new_agenda.save()
             meeting.agendas.add(new_agenda)
+
+        meeting.save()
+        serializer = MeetingSerialize(instance = meeting, data = request.data)
+        serializer.is_valid(raise_exception = True)
+
+class FinishMeeting(UpdateAPIView):
+
+    serializer_class = MeetingSerialize
+    queryset = Meeting.objects.all()
+
+    def put(self, request, *args, **kwargs):
+
+        meeting = Meeting.objects.get(id = request.data.get('meetingID'))
+        project = Project.objects.get(id = request.data.get('projectID'))
+        meeting_leader = User.objects.get(id = request.data.get('userID'))
+
+        meeting.title = request.data.get('title')
+        meeting.status = request.data.get('status')
+        meeting.slug = slugify(meeting.title)
+        meeting.initial_date = request.data.get('initial_date')
+        meeting.initial_hour = request.data.get('initial_hour')
+        meeting.subject_matter = request.data.get('subject_matter')
+        meeting.duration_time = request.data.get('duration_time')
+        meeting.real_hour = request.data.get('real_hour')
+        meeting.real_date = request.data.get('real_date')
+        meeting.project = project
+        meeting.meeting_leader = meeting_leader
 
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
