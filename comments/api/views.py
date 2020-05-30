@@ -64,3 +64,14 @@ class CommentsUpdateView(UpdateAPIView):
         serializer.is_valid(raise_exception = True)
 
         return Response(serializer.data)
+
+class CommentMeeting(ListAPIView):
+
+    serializer_class = CommentsSerializer
+
+    def get_queryset(self):
+
+        meeting_id = self.kwargs['pk']
+        list_comments = Comment.objects.filter(meeting = meeting_id)
+
+        return list_comments
