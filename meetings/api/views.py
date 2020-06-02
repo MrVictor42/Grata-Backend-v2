@@ -8,6 +8,9 @@ from meetings.models import Meeting
 from projects.models import Project
 from rules.models import Rules
 from agenda.models import Agenda
+from questionnaires.models import Questionnaire
+from quiz.models import Quiz
+from choices.models import Choice
 
 from meetings.api.serializers import MeetingSerialize
 
@@ -255,3 +258,44 @@ class FinishMeeting(UpdateAPIView):
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
         serializer.is_valid(raise_exception = True)
+
+class AddQuesttionaire(UpdateAPIView):
+
+    serializer_class = MeetingSerialize
+    queryset = Meeting.objects.all()
+    lookup_field = 'slug'
+
+    def put(self, request, *args, **kwargs):
+
+        meeting = Meeting.objects.get(slug = request.data.get('slug'))
+
+        questtionaire = Questionnaire()
+        questtionaire.title = request.data.get('questtionaire')['title']
+        questtionaire.save()
+        meeting.questtionaire.add(questtionaire)
+        order = 1
+
+
+        for quiz in request.data.get('questtionaire')['questions']:
+
+            new_quiz = Quiz()
+            new_quiz.title = quiz['title']
+            new_quiz.order = order
+            new_quiz.save()
+
+            for user in meeting.users.all():
+
+                if user.name == str(meeting.meeting_leader):
+                    print('Usuário é o Lider da Reunião')
+                else:
+                    new_quiz.users.add(user)
+
+                for choice in quiz.get('choices'):
+                    new_choice = Choice()
+                    new_choice.title = choice
+                    new_choice.save()
+                    new_quiz.choices.add(new_choice)
+
+            new_quiz.questtionaire = questtionaire
+            new_quiz.save()
+            order += 1

@@ -4,6 +4,7 @@ from users.models import User
 from projects.models import Project
 from agenda.models import Agenda
 from rules.models import Rules
+from questionnaires.models import Questionnaire
 
 class Meeting(models.Model):
 
@@ -25,6 +26,7 @@ class Meeting(models.Model):
     users = models.ManyToManyField(User, blank = True, null = True)
     rules = models.ManyToManyField(Rules, blank = True, null = True)
     agendas = models.ManyToManyField(Agenda, blank = True, null = True)
+    questtionaire = models.ManyToManyField(Questionnaire, blank = True)
 
     def __str__(self):
         return self.title
