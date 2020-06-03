@@ -1,9 +1,14 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView
 
 from quiz.api.serializers import QuizSerialize
 from quiz.models import Quiz
 
 class QuizListView(ListAPIView):
+
+    serializer_class = QuizSerialize
+    queryset = Quiz.objects.all()
+
+class QuizDelete(DestroyAPIView):
 
     serializer_class = QuizSerialize
     queryset = Quiz.objects.all()

@@ -26,7 +26,8 @@ class Meeting(models.Model):
     users = models.ManyToManyField(User, blank = True, null = True)
     rules = models.ManyToManyField(Rules, blank = True, null = True)
     agendas = models.ManyToManyField(Agenda, blank = True, null = True)
-    questtionaire = models.ManyToManyField(Questionnaire, blank = True)
+    questtionaire = models.ForeignKey(Questionnaire, on_delete = models.CASCADE,
+                                related_name = 'meetings_in_project', blank = True, null = True)
 
     def __str__(self):
         return self.title

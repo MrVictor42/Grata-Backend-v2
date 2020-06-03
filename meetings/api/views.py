@@ -37,6 +37,8 @@ class MeetingCreateView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
+        print(request.data)
+
         meeting = Meeting()
 
         project = Project.objects.get(id = request.data.get('project'))
@@ -53,6 +55,7 @@ class MeetingCreateView(CreateAPIView):
         meeting.duration_time = None
         meeting.real_hour = None
         meeting.real_date = None
+        meeting.questtionaire = None
 
         meeting.save()
         serializer = MeetingSerialize(instance = meeting, data = request.data)
@@ -232,6 +235,8 @@ class MeetingAddItems(UpdateAPIView):
         serializer = MeetingSerialize(instance = meeting, data = request.data)
         serializer.is_valid(raise_exception = True)
 
+        return Response(serializer.data)
+
 class FinishMeeting(UpdateAPIView):
 
     serializer_class = MeetingSerialize
@@ -259,6 +264,8 @@ class FinishMeeting(UpdateAPIView):
         serializer = MeetingSerialize(instance = meeting, data = request.data)
         serializer.is_valid(raise_exception = True)
 
+        return Response(serializer.data)
+
 class AddQuesttionaire(UpdateAPIView):
 
     serializer_class = MeetingSerialize
@@ -272,7 +279,7 @@ class AddQuesttionaire(UpdateAPIView):
         questtionaire = Questionnaire()
         questtionaire.title = request.data.get('questtionaire')['title']
         questtionaire.save()
-        meeting.questtionaire.add(questtionaire)
+        meeting.questtionaire = questtionaire
         order = 1
 
 
@@ -299,3 +306,9 @@ class AddQuesttionaire(UpdateAPIView):
             new_quiz.questtionaire = questtionaire
             new_quiz.save()
             order += 1
+
+        meeting.save()
+        serializer = MeetingSerialize(instance = meeting, data = request.data)
+        serializer.is_valid(raise_exception = True)
+
+        return Response(serializer.data)
