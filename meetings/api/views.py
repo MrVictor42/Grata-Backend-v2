@@ -282,7 +282,6 @@ class AddQuesttionaire(UpdateAPIView):
         meeting.questtionaire = questtionaire
         order = 1
 
-
         for quiz in request.data.get('questtionaire')['questions']:
 
             new_quiz = Quiz()
@@ -297,11 +296,11 @@ class AddQuesttionaire(UpdateAPIView):
                 else:
                     new_quiz.users.add(user)
 
-                for choice in quiz.get('choices'):
-                    new_choice = Choice()
-                    new_choice.title = choice
-                    new_choice.save()
-                    new_quiz.choices.add(new_choice)
+            for choice in quiz.get('choices'):
+                new_choice = Choice()
+                new_choice.title = choice
+                new_choice.save()
+                new_quiz.choices.add(new_choice)
 
             new_quiz.questtionaire = questtionaire
             new_quiz.save()

@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView, RetrieveAPIView
 
 from quiz.api.serializers import QuizSerialize
 from quiz.models import Quiz

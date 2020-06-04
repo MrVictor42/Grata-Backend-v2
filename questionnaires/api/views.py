@@ -8,13 +8,16 @@ from quiz.models import Quiz
 
 
 class QuesttionaireCreateView(CreateAPIView):
+
     serializer_class = QuizSerialize
     queryset = Quiz.objects.all()
 
 class QuesttionaireListView(ListAPIView):
+
     serializer_class = QuestionnaireSerialize
     queryset = Questionnaire.objects.all()
 
 class QuesttionaireDetailView(RetrieveAPIView):
+
     serializer_class = QuestionnaireSerialize
     queryset = Questionnaire.objects.all()
