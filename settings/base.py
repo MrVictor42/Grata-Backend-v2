@@ -31,8 +31,9 @@ INSTALLED_APPS = [
     'agenda',
     'rules',
     'comments',
-    'quiz',
+    'questions',
     'questionnaires',
+    'gradedQuesttionaire',
     'choices'
 ]
 

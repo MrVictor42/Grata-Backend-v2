@@ -19,5 +19,6 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     path('choices/', include('choices.urls')),
     path('questtionnaires/', include('questionnaires.urls')),
-    path('quiz/', include('quiz.urls'))
+    path('questions/', include('questions.urls')),
+    path('gradedQuesttionaire/', include('gradedQuesttionaire.urls'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

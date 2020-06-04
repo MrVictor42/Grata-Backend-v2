@@ -3,14 +3,13 @@ from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from questionnaires.models import Questionnaire
 from questionnaires.api.serializers import QuestionnaireSerialize
 
-from quiz.api.serializers import QuizSerialize
-from quiz.models import Quiz
-
+from questions.api.serializers import QuestionsSerialize
+from questions.models import Questions
 
 class QuesttionaireCreateView(CreateAPIView):
 
-    serializer_class = QuizSerialize
-    queryset = Quiz.objects.all()
+    serializer_class = QuestionsSerialize
+    queryset = Questions.objects.all()
 
 class QuesttionaireListView(ListAPIView):
 

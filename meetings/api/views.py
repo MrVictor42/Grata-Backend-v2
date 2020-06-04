@@ -9,7 +9,7 @@ from projects.models import Project
 from rules.models import Rules
 from agenda.models import Agenda
 from questionnaires.models import Questionnaire
-from quiz.models import Quiz
+from questions.models import Questions
 from choices.models import Choice
 
 from meetings.api.serializers import MeetingSerialize
@@ -36,8 +36,6 @@ class MeetingCreateView(CreateAPIView):
     queryset = Meeting.objects.all()
 
     def post(self, request, *args, **kwargs):
-
-        print(request.data)
 
         meeting = Meeting()
 
@@ -282,28 +280,28 @@ class AddQuesttionaire(UpdateAPIView):
         meeting.questtionaire = questtionaire
         order = 1
 
-        for quiz in request.data.get('questtionaire')['questions']:
+        for question in request.data.get('questtionaire')['questions']:
 
-            new_quiz = Quiz()
-            new_quiz.title = quiz['title']
-            new_quiz.order = order
-            new_quiz.save()
+            new_question = Questions()
+            new_question.title = question['title']
+            new_question.order = order
+            new_question.save()
 
             for user in meeting.users.all():
 
                 if user.name == str(meeting.meeting_leader):
                     print('Usuário é o Lider da Reunião')
                 else:
-                    new_quiz.users.add(user)
+                    new_question.users.add(user)
 
-            for choice in quiz.get('choices'):
+            for choice in question.get('choices'):
                 new_choice = Choice()
                 new_choice.title = choice
                 new_choice.save()
-                new_quiz.choices.add(new_choice)
+                new_question.choices.add(new_choice)
 
-            new_quiz.questtionaire = questtionaire
-            new_quiz.save()
+            new_question.questtionaire = questtionaire
+            new_question.save()
             order += 1
 
         meeting.save()

@@ -4,7 +4,7 @@ from choices.models import Choice
 from users.models import User
 from questionnaires.models import Questionnaire
 
-class Quiz(models.Model):
+class Questions(models.Model):
 
     title = models.CharField(max_length = 50)
     choices = models.ManyToManyField(Choice, blank = True)

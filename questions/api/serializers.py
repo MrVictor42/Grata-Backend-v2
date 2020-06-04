@@ -1,14 +1,14 @@
 from rest_framework.serializers import ModelSerializer
 
 from users.api.serializers import StringSerializer
-from quiz.models import Quiz
+from questions.models import Questions
 
-class QuizSerialize(ModelSerializer):
+class QuestionsSerialize(ModelSerializer):
 
     choices = StringSerializer(many = True)
     users = StringSerializer(many = True)
 
     class Meta:
 
-        model = Quiz
+        model = Questions
         fields = ('__all__')
