@@ -6,3 +6,14 @@ class ChoiceListView(ListAPIView):
 
     serializer_class = ChoiceSerialize
     queryset = Choice.objects.all()
+
+class ChoicesQuestion(ListAPIView):
+
+    serializer_class = ChoiceSerialize
+
+    def get_queryset(self):
+
+        question_id = self.kwargs['pk']
+        list_choices = Choice.objects.filter(questions = question_id)
+
+        return list_choices
