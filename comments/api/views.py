@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from comments.models import Comment
 from users.models import User
 from meetings.models import Meeting
+from questionnaires.models import Questionnaire
 
 from comments.api.serializers import CommentsSerializer
 
@@ -32,11 +33,11 @@ class CommentsCreateView(CreateAPIView):
 
         comment = Comment()
 
-        meeting = Meeting.objects.get(id = request.data.get('meeting'))
+        questtionaire = Questionnaire.objects.get(id = request.data.get('questtionaire'))
         user = User.objects.get(id = request.data.get('user'))
 
         comment.description = request.data.get('description')
-        comment.meeting = meeting
+        comment.questtionaire = questtionaire
         comment.user = user
 
         comment.save()
@@ -65,13 +66,13 @@ class CommentsUpdateView(UpdateAPIView):
 
         return Response(serializer.data)
 
-class CommentMeeting(ListAPIView):
+class CommentQuesttionaire(ListAPIView):
 
     serializer_class = CommentsSerializer
 
     def get_queryset(self):
 
-        meeting_id = self.kwargs['pk']
-        list_comments = Comment.objects.filter(meeting = meeting_id)
+        questtionaire_id = self.kwargs['pk']
+        list_comments = Comment.objects.filter(questtionaire = questtionaire_id)
 
         return list_comments

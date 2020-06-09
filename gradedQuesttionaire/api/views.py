@@ -1,5 +1,10 @@
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.status import (
+    HTTP_202_ACCEPTED,
+    HTTP_400_BAD_REQUEST
+)
 
 from gradedQuesttionaire.models import GradedQuesttionaire
 from users.models import User
@@ -45,3 +50,30 @@ class GradedQuesttionaireCreate(CreateAPIView):
         serializer.is_valid(raise_exception = True)
 
         return Response(serializer.data)
+
+class GradedInQuesttionaire(ListAPIView):
+
+    serializer_class = GradedQuesttionaireSerialize
+    queryset = GradedQuesttionaire.objects.all()
+
+    def get_queryset(self):
+
+        questtionaire_id = self.kwargs['pk']
+        graded_questtionaire = GradedQuesttionaire.objects.filter(questtionaire = questtionaire_id)
+
+        return graded_questtionaire
+
+class UserInGraded(RetrieveAPIView):
+
+    serializer_class = GradedQuesttionaireSerialize
+    queryset = GradedQuesttionaire.objects.all()
+
+    def get_queryset(self):
+
+        user_id = self.kwargs['pk']
+        graded_questtionaire = GradedQuesttionaire.objects.filter(user = user_id)
+
+        if graded_questtionaire:
+            return graded_questtionaire
+        else:
+            return None
